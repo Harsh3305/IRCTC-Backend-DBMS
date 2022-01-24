@@ -23,7 +23,7 @@ router.post("/createTrain", verifyAdminAccessToken, async (req, res) => {
 });
 
 
-router.putst("/delayTrain", verifyAdminAccessToken, async (req, res) => {
+router.put("/delayTrain", verifyAdminAccessToken, async (req, res) => {
     try {
         const train_id = req.body.train_id;
         const delay = req.body.delay;
