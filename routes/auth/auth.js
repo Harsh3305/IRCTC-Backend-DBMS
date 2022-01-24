@@ -1,4 +1,4 @@
-const router = express().Router();
+const router = require("express").Router();
 const { createUser, loginUser } = require("./../../service/auth_service");
 const jwt = require("jsonwebtoken");
 const CryptoJS = require("crypto-js");

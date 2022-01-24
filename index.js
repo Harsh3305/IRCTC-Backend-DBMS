@@ -18,7 +18,7 @@ const AdminTrainRouter = require("./routes/admin/Train");
 
 const UserCoachRouter = require("./routes/user/Coach");
 const UserStationRouter = require("./routes/user/Station");
-const UserTrainRouter = require("./routes/user/Train");
+const UserTrainRouter = require("./routes/user/Trains");
 const UserProcessUserRouter = require("./routes/user/ProcessUser");
 
 

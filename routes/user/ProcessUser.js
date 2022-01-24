@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 const { verifyUserAccessToken } = require("./../verify_access_token");
 const { deleteUser, getUser, updateUser } = require("./../../service/process_user_service");
