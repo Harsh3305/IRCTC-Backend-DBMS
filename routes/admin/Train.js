@@ -87,7 +87,7 @@ router.get("/getTrain/:source_id/:destination_id", verifyAdminAccessToken, async
     }
 });
 
-router.get("getAllTrains", verifyAdminAccessToken, (req, res) => {
+router.get("/getAllTrains", verifyAdminAccessToken, (req, res) => {
     try {
         // get Trains
         getAllTrain((error, responce) => {
