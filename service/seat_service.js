@@ -192,3 +192,4 @@ function isSeatBooked(seat_id, callback) {
         });
     });
 }
+module.exports = { createSeat, bookSeat, getAllVacentSeatOfCoach }
