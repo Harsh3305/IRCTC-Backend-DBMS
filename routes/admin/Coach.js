@@ -64,3 +64,5 @@ router.get("/getCoachesByTrainId/:train_id", verifyAdminAccessToken, async (req,
         res.status(500).send("Something went wrong !!");
     }
 });
+
+module.exports = router;
