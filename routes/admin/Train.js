@@ -9,7 +9,7 @@ router.post("/createTrain", verifyAdminAccessToken, async (req, res) => {
 
         createTrain(train_name, train_code, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);

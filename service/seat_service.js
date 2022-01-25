@@ -81,6 +81,7 @@ function bookSeat(seat_id, callback) {
     });
 }
 
+
 // TODO:
 function cancellSeat(callback) {
 
@@ -129,7 +130,7 @@ function cancellSeat(callback) {
     });
 }
 
-function getAllVacentSeatOfCoach(callback) {
+function getAllVacentSeatOfCoach(coach_id, callback) {
     const connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
@@ -142,7 +143,7 @@ function getAllVacentSeatOfCoach(callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECE * FROM SEAT WHERE IS_SEAT_BOOKED = 'TRUE'`;
+            const sql_query = `SELECT * FROM SEAT WHERE IS_SEAT_BOOKED = 'FALSE' AND COACH_ID = '${coach_id}'`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
