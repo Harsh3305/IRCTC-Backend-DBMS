@@ -7,8 +7,8 @@ router.post("/createCoach", verifyAdminAccessToken, async (req, res) => {
     try {
         const train_id = req.body.train_id;
         const coach_type = req.body.coach_type;
-
-        createCoach(train_id, coach_type, (error, responce) => {
+        const price = req.body.price;
+        createCoach(train_id, coach_type, price, (error, responce) => {
             if (error) {
                 res.status(error.error_code).send(error.error_message);
             }
