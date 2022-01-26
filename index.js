@@ -46,17 +46,17 @@ app.use(json());
 app.use("/api/auth", AuthRouter);
 
 // Use User route
-app.use("/api/user/", UserCoachRouter);
-app.use("/api/user/", UserStationRouter);
-app.use("/api/user/", UserTrainRouter);
-app.use("/api/user/", UserProcessUserRouter);
+app.use("/api/user/coach", UserCoachRouter);
+app.use("/api/user/station", UserStationRouter);
+app.use("/api/user/train", UserTrainRouter);
+app.use("/api/user/processUser", UserProcessUserRouter);
 
 
 // Use Admin route
 
-app.use("/api/admin/", AdminCoachRouter);
-app.use("/api/admin/", AdminStationRouter);
-app.use("/api/admin/", AdminTrainRouter);
+app.use("/api/admin/coach/", AdminCoachRouter);
+app.use("/api/admin/station", AdminStationRouter);
+app.use("/api/admin/train", AdminTrainRouter);
 
 app.listen(process.env.PORT, function () {
   console.log("Server is Started");
