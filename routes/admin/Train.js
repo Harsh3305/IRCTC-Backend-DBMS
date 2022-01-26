@@ -31,7 +31,7 @@ router.put("/delayTrain", verifyAdminAccessToken, async (req, res) => {
 
         delayTrain(train_id, delay, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -52,7 +52,7 @@ router.get("/getTrain/:train_id", verifyAdminAccessToken, async (req, res) => {
 
         getTrain(train_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -74,7 +74,7 @@ router.get("/getTrain/:source_id/:destination_id", verifyAdminAccessToken, async
 
         getTrainFromSourceDestinaiton(source_id, destination_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -92,7 +92,7 @@ router.get("/getAllTrains", verifyAdminAccessToken, (req, res) => {
         // get Trains
         getAllTrain((error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);

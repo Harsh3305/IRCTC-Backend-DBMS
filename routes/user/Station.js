@@ -9,7 +9,7 @@ router.get("/getStationByID/:station_id", verifyUserAccessToken, async (req, res
 
         getStation(station_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -27,7 +27,7 @@ router.get("/getAllStation", verifyUserAccessToken, async (req, res) => {
     try {
         getAllStation((error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);

@@ -7,7 +7,7 @@ router.get("/getCoachByID/:coach_id", verifyUserAccessToken, async (req, res) =>
         const coach_id = req.params.coach_id;
         getCoachByID(coach_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -27,7 +27,7 @@ router.get("/getCoachesByTrainID/:train_id", verifyUserAccessToken, async (req, 
 
         getCoachesOfTrain(train_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);

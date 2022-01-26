@@ -10,7 +10,7 @@ router.get("/getTrain/:train_id", verifyUserAccessToken, async (req, res) => {
 
         getTrain(train_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -32,7 +32,7 @@ router.get("/getTrain/:source_id/:destination_id", verifyUserAccessToken, async 
 
         getTrainFromSourceDestinaiton(source_id, destination_id, (error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -50,7 +50,7 @@ router.get("getAllTrains", verifyUserAccessToken, (req, res) => {
         // get Trains
         getAllTrain((error, responce) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(responce);
@@ -63,12 +63,12 @@ router.get("getAllTrains", verifyUserAccessToken, (req, res) => {
     }
 });
 
-router.get ("getCoachOfTrain/:train_id", verifyUserAccessToken, async (req, res) => {
+router.get("getCoachOfTrain/:train_id", verifyUserAccessToken, async (req, res) => {
     try {
         const train_id = req.params.train_id;
-        getAllCoachOfTrain(train_id, (error,result)=>{
+        getAllCoachOfTrain(train_id, (error, result) => {
             if (error) {
-                res.status(error.error_code).send(error.message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 res.status(200).json(result);

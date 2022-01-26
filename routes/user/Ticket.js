@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { verifyUserAccessToken } = require("./../verify_access_token");
-const {createTrain,getTrain,getTrainFromSourceDestinaiton,getAllTrain,delayTrain,getAllCoachOfTrain} = require("./../../service/train_service");
-const {getAllVacentSeatOfCoach} = require("./../../service/seat_service");
+const { createTrain, getTrain, getTrainFromSourceDestinaiton, getAllTrain, delayTrain, getAllCoachOfTrain } = require("./../../service/train_service");
+const { getAllVacentSeatOfCoach } = require("./../../service/seat_service");
 // book ticket cluster
 router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     try {
@@ -10,13 +10,13 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
         const passengers = req.body.passengers;
         getAllVacentSeatOfCoach(coach_id, (error, result) => {
             if (error) {
-                res.status (error.code).send(error.message);
+                res.status(error.code).send(error.error_message);
             }
             else {
                 try {
                     // number of passangers (number passanger <= seat of coach)
                     // ticket available in coach_id
-                    if(passengers>result.length) {
+                    if (passengers > result.length) {
                         res.status(500).send("Number of passangers are greater then available seats in coach");
                     }
                     // else {
@@ -25,7 +25,7 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                     // }
                 }
                 catch (error) {
-                    
+
                     res.status(500).send("Number of passangers are greater then available seats in coach");
                 }
             }
@@ -36,9 +36,9 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     }
 
     // coach_id
-    
-    
-    
+
+
+
     // create payment
 });
 // delete ticket cluster if user
@@ -49,7 +49,7 @@ router.get("/numberOfVacentSeat/:coach_id", verifyUserAccessToken, async (req, r
         const coach_id = req.params.coach_id;
         getAllVacentSeatOfCoach(coach_id, (error, result) => {
             if (error) {
-                res.status (error.code).send(error.message);
+                res.status(error.code).send(error.error_message);
             }
             else {
                 try {
