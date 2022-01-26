@@ -1,4 +1,4 @@
-const { createCoach, getCoachByID, getCoachesOfTrain } = require("./../../service/coach_service");
+const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice } = require("./../../service/coach_service");
 const router = require("express").Router();
 const { verifyAdminAccessToken } = require("./../verify_access_token");
 
@@ -62,6 +62,26 @@ router.get("/getCoachesByTrainId/:train_id", verifyAdminAccessToken, async (req,
     }
     catch (error) {
         res.status(500).send("Something went wrong !!");
+    }
+});
+
+router.get ("/getBasePrice/:coach_id/:source_station_id/:destination_station_id", verifyAdminAccessToken, async (req, res)=> {
+    try {
+        const coach_id = req.params.coach_id;
+        const source_station_id = req.params.source_station_id;
+        const destination_station_id = req.params.destination_station_id;
+
+        getbasePrice(coach_id, source_station_id, destination_station_id, (error, result)=> {
+            if (error) {
+                res.status(error.error_code).send(error.error_message);
+            }
+            else {
+                res.status(200).json({"price without gst": result});
+            }
+        });
+    }
+    catch (error) {
+        res.status(500).send("SOmething went wrong");
     }
 });
 

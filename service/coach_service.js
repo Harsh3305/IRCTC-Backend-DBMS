@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-
+const {getStationDistance} = require("./station_status");
 function createCoach(train_id, coach_type, price, callback) {
 
     const connection = mysql.createConnection({
@@ -15,7 +15,7 @@ function createCoach(train_id, coach_type, price, callback) {
         }
         else {
             const values = [[train_id, coach_type, price]];
-            const sql_query = `INSERT INTO STATION (TRAIN_ID, COACH_TYPE, PRICE) VALUES ? ;`;
+            const sql_query = `INSERT INTO COACH (TRAIN_ID, COACH_TYPE, PRICE) VALUES ? ;`;
             connection.query(sql_query, [values], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -49,7 +49,7 @@ function getCoachByID(coach_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECT * FROM COACH WHERE COACH_ID = '${coach_id}'`;
+            const sql_query = `SELECT * FROM COACH WHERE COACH_ID = '${coach_id}';`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -101,5 +101,30 @@ function getCoachesOfTrain(train_id, callback) {
         }
     });
 }
+function getbasePrice(coach_id, source_station_id, destination_station_id, callback ) {
+    try {
+        getCoachByID(coach_id, (error, result)=> {
+            if (error) {
+                callback({ error_code: 500, error_message: error.message });
+            }
+            else {
+                const train_id = result.TRAIN_ID;
+                const price = result.PRICE;
+                getStationDistance(train_id, source_station_id, destination_station_id, (error, result)=>{
+                    if (error) {
+                        callback({ error_code: 500, error_message: error.message });
+                    }
+                    else {
+                        const totalPrice = price*result;
+                        callback(null, totalPrice);
 
-module.exports = { createCoach, getCoachByID, getCoachesOfTrain }
+                    }
+                });
+            }
+        })
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+module.exports  = { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice }

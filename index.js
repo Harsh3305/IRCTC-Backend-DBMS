@@ -13,6 +13,7 @@ const AuthRouter = require("./routes/auth/auth");
 const AdminCoachRouter = require("./routes/admin/Coach");
 const AdminStationRouter = require("./routes/admin/Station");
 const AdminTrainRouter = require("./routes/admin/Train");
+const AdminStationStatusRouter = require("./routes/admin/StationStatus");
 
 // Import User routes
 
@@ -54,9 +55,10 @@ app.use("/api/user/processUser", UserProcessUserRouter);
 
 // Use Admin route
 
-app.use("/api/admin/coach/", AdminCoachRouter);
+app.use("/api/admin/coach", AdminCoachRouter);
 app.use("/api/admin/station", AdminStationRouter);
 app.use("/api/admin/train", AdminTrainRouter);
+app.use("/api/admin/stationStatus", AdminStationStatusRouter);
 
 app.listen(process.env.PORT, function () {
   console.log("Server is Started");
