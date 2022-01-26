@@ -14,8 +14,8 @@ function createStation(station_name, type, station_code, callback) {
             console.log(error);
         }
         else {
-            const values = [station_name, type, station_code];
-            const sql_query = `INSERT INTO STATION (STATION_NAME, TYPE, STATION_CODE) VALUES ? `;
+            const values = [[station_name, type, station_code]];
+            const sql_query = `INSERT INTO STATION (STATION_NAME, TYPE, STATION_CODE) VALUES ? ;`;
             connection.query(sql_query, [values], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -87,7 +87,7 @@ function getAllStation(callback) {
                     callback({ error_code: 500, error_message: error.message });
                 }
                 else {
-                    callback(null, result[0]);
+                    callback(null, result);
                 }
             })
         }

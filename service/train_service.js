@@ -202,4 +202,4 @@ function getAllCoachOfTrain(train_id, callback) {
 }
 
 
-module.exports = { createTrain, getTrain, getTrainFromSourceDestinaiton, getAllTrain, delayTrain, getAllCoachOfTrain}
+module.exports = { createTrain, getTrain, getTrainFromSourceDestinaiton, getAllTrain, delayTrain, getAllCoachOfTrain }

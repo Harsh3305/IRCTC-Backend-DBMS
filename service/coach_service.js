@@ -14,8 +14,8 @@ function createCoach(train_id, coach_type, price, callback) {
             console.log(error);
         }
         else {
-            const values = [train_id, coach_type, price];
-            const sql_query = `INSERT INTO STATION (TRAIN_ID, COACH_TYPE, PRICE) VALUES ? `;
+            const values = [[train_id, coach_type, price]];
+            const sql_query = `INSERT INTO STATION (TRAIN_ID, COACH_TYPE, PRICE) VALUES ? ;`;
             connection.query(sql_query, [values], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

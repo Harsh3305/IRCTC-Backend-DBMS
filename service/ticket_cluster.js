@@ -14,8 +14,8 @@ function createTicketCluster(train_departure_time, source_id, destination_id, pa
             console.log(error);
         }
         else {
-            const values = [train_departure_time, source_id, destination_id, payment_id];
-            const sql_query = `INSERT INTO TICKET_CLUSTER (TRAIN_DEPARTURE_TIME, SOURCE_ID, DESTINATION_ID, PAYMENT_ID) VALUES ? `;
+            const values = [[train_departure_time, source_id, destination_id, payment_id]];
+            const sql_query = `INSERT INTO TICKET_CLUSTER (TRAIN_DEPARTURE_TIME, SOURCE_ID, DESTINATION_ID, PAYMENT_ID) VALUES ? ;`;
             connection.query(sql_query, [values], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

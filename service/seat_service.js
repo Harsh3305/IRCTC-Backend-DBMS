@@ -14,8 +14,8 @@ function createSeat(coach_id, seat_number, seat_type, callback) {
             console.log(error);
         }
         else {
-            const values = [coach_id, seat_number, seat_type, false];
-            const sql_query = `INSERT INTO SEAT (COACH_ID, SEAT_NUMBER, SEAT_TYPE, IS_SEAT_BOOKED) VALUES ? `;
+            const values = [[coach_id, seat_number, seat_type, false]];
+            const sql_query = `INSERT INTO SEAT (COACH_ID, SEAT_NUMBER, SEAT_TYPE, IS_SEAT_BOOKED) VALUES ? ;`;
             connection.query(sql_query, [values], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

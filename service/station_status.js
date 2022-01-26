@@ -14,8 +14,8 @@ function creatStationStatus(train_id, station_id, arivalTime, deaparture_time, c
             console.log(error);
         }
         else {
-            const value = [train_id, station_id, arivalTime, deaparture_time];
-            const sql_query = `INSERT INTO STATION_STATUS (TRAIN_ID, STATION_ID, ARIVAL_TIME, DEPARTURE_TIME) VALUES = ?;`;
+            const value = [[train_id, station_id, arivalTime, deaparture_time]];
+            const sql_query = `INSERT INTO STATION_STATUS (TRAIN_ID, STATION_ID, ARIVAL_TIME, DEPARTURE_TIME) VALUES = ? ;`;
             connection.query(sql_query, [value], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
