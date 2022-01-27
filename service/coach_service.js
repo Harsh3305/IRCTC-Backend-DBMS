@@ -101,6 +101,38 @@ function getCoachesOfTrain(train_id, callback) {
         }
     });
 }
+function getTrainIdFromCoachId (coach_id, callback) {
+    
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        database: process.env.DB
+    });
+
+    connection.connect((error) => {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            const sql_query = `SELECT TRAIN_ID FROM COACH WHERE COACH_ID = '${coach_id}'`;
+            connection.query(sql_query, (error, result) => {
+                if (error) {
+                    callback({ error_code: 500, error_message: error.message });
+                }
+                else {
+                    callback(null, result[0]);
+                }
+            })
+
+            connection.end((error) => {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        }
+    });
+}
 function getbasePrice(coach_id, source_station_id, destination_station_id, callback ) {
     try {
         getCoachByID(coach_id, (error, result)=> {
@@ -127,4 +159,4 @@ function getbasePrice(coach_id, source_station_id, destination_station_id, callb
         console.error(error);
     }
 }
-module.exports  = { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice }
+module.exports  = { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice,getTrainIdFromCoachId, getTrainIdFromCoachId}

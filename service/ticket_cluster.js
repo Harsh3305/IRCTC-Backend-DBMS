@@ -21,7 +21,7 @@ function createTicketCluster(train_departure_time, source_id, destination_id, pa
                     callback({ error_code: 500, error_message: error.message });
                 }
                 else {
-                    callback(null, "TICKET_CLUSTER created successfully");
+                    callback(null, result.insertId);
                 }
             })
         }

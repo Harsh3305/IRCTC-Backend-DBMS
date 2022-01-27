@@ -2,9 +2,19 @@ const router = require("express").Router();
 const { verifyUserAccessToken } = require("./../verify_access_token");
 const { createTrain, getTrain, getTrainFromSourceDestinaiton, getAllTrain, delayTrain, getAllCoachOfTrain } = require("./../../service/train_service");
 const { getAllVacentSeatOfCoach } = require("./../../service/seat_service");
+const {bookSeat} = require("./../../service/seat_service");
+const {creatTicket} = require("./../../service/ticket");
+const {createCoach, getCoachByID, getCoachesOfTrain, getbasePrice,getTrainIdFromCoachId, getTrainIdFromCoachId } = require("./../../service/coach_service");
 // book ticket cluster
 router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     try {
+        /**
+         * passengers = [
+         *      {name:String,
+         *      age:int
+         *      gender: 'M, "F", "O"}
+         * ]
+         */
         const coach_id = req.body.coach_id;
         const user_id = req.body.user_id;
         const passengers = req.body.passengers;
@@ -16,13 +26,28 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                 try {
                     // number of passangers (number passanger <= seat of coach)
                     // ticket available in coach_id
-                    if (passengers > result.length) {
+                    if (passengers.length > result.length) {
                         res.status(500).send("Number of passangers are greater then available seats in coach");
                     }
-                    // else {
-                    //     // update seat IS_SEAT_BOOKED = true
-                    //     under_booking_seats = result.
-                    // }
+                    else {
+                        // update seat IS_SEAT_BOOKED = true
+                        under_booking_seats = result.slice(0, passengers.length);
+                        // seat book 
+                        for (let i = 0; i<under_booking_seats.length; i++) {
+                            const seat_id = seat[i].SEAT_ID;
+                            bookSeat(seat_id, (error, result) => {
+                                if (error) {
+                                    res.status(error.code).send(error.error_message);
+                                }
+                                else {
+                                    passengers[i].seat_id = seat_id;
+                                }
+                            });
+                        }
+                        // create ticket cluster
+                        // create ticket
+                        // create payment
+                    }
                 }
                 catch (error) {
 

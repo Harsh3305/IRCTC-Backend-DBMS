@@ -14,7 +14,7 @@ const AdminCoachRouter = require("./routes/admin/Coach");
 const AdminStationRouter = require("./routes/admin/Station");
 const AdminTrainRouter = require("./routes/admin/Train");
 const AdminStationStatusRouter = require("./routes/admin/StationStatus");
-
+const AdminSeatRouter = require("./routes/admin/Seat");;
 // Import User routes
 
 const UserCoachRouter = require("./routes/user/Coach");
@@ -59,7 +59,7 @@ app.use("/api/admin/coach", AdminCoachRouter);
 app.use("/api/admin/station", AdminStationRouter);
 app.use("/api/admin/train", AdminTrainRouter);
 app.use("/api/admin/stationStatus", AdminStationStatusRouter);
-
+app.use("/api/admin/seat", AdminSeatRouter);
 app.listen(process.env.PORT, function () {
   console.log("Server is Started");
 });
