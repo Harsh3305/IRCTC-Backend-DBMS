@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 
 
-function creatPassanger(name, age, gender, ticket_id, seat_id, callback) {
+function creatPassanger(name, age, gender, seat_id, callback) {
 
     const connection = mysql.createConnection({
         host: process.env.HOST,
@@ -15,14 +15,14 @@ function creatPassanger(name, age, gender, ticket_id, seat_id, callback) {
             console.log(error);
         }
         else {
-            const value = [[name, age, gender, ticket_id, seat_id]];
-            const sql_query = `INSERT INTO PASSANGER (NAME, AGE, TICKET_ID, SEAT_ID) VALUES = ?;`;
+            const value = [[name, age, gender, seat_id]];
+            const sql_query = `INSERT INTO PASSANGER (NAME, AGE, SEAT_ID) VALUES = ?;`;
             connection.query(sql_query, [value], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
                 }
                 else {
-                    callback(null, 'Passanger created successfully');
+                    callback(null, result.insertId);
                 }
             });
         }

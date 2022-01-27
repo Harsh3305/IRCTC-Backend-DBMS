@@ -2,9 +2,12 @@ const router = require("express").Router();
 const { verifyUserAccessToken } = require("./../verify_access_token");
 const { createTrain, getTrain, getTrainFromSourceDestinaiton, getAllTrain, delayTrain, getAllCoachOfTrain } = require("./../../service/train_service");
 const { getAllVacentSeatOfCoach } = require("./../../service/seat_service");
-const {bookSeat} = require("./../../service/seat_service");
-const {creatTicket} = require("./../../service/ticket");
-const {createCoach, getCoachByID, getCoachesOfTrain, getbasePrice,getTrainIdFromCoachId, getTrainIdFromCoachId } = require("./../../service/coach_service");
+const { bookSeat } = require("./../../service/seat_service");
+const { creatTicket } = require("./../../service/ticket");
+const { createTicketCluster } = require("./../../service/ticket_cluster");
+const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFromCoachId, getTrainIdFromCoachId } = require("./../../service/coach_service");
+const { creatPayment } = require("./../../service/payment");
+const { creatPassanger } = require("./../../service/passanger");
 // book ticket cluster
 router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     try {
@@ -18,6 +21,11 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
         const coach_id = req.body.coach_id;
         const user_id = req.body.user_id;
         const passengers = req.body.passengers;
+        const source_id = req.body.source_id;
+        const destination_id = req.body.destination_id;
+        const train_id = req.body.train_id;
+        const train_departure_time = req.body.train_departure_time;
+
         getAllVacentSeatOfCoach(coach_id, (error, result) => {
             if (error) {
                 res.status(error.code).send(error.error_message);
@@ -33,7 +41,7 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                         // update seat IS_SEAT_BOOKED = true
                         under_booking_seats = result.slice(0, passengers.length);
                         // seat book 
-                        for (let i = 0; i<under_booking_seats.length; i++) {
+                        for (let i = 0; i < under_booking_seats.length; i++) {
                             const seat_id = seat[i].SEAT_ID;
                             bookSeat(seat_id, (error, result) => {
                                 if (error) {
@@ -41,10 +49,53 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                                 }
                                 else {
                                     passengers[i].seat_id = seat_id;
+                                    // create ticket cluster
+                                    createTicketCluster(train_departure_time, source_id, destination_id, train_id, (error, ticket_cluster_id) => {
+                                        if (error) {
+                                            res.status(error.code).send(error.error_message);
+                                        }
+                                        else {
+                                            getbasePrice(coach_id, source_id, destination_id, (error, totalPrice) => {
+                                                if (error) {
+                                                    res.status(error.code).send(error.error_message);
+                                                }
+                                                else {
+                                                    creatPayment(ticket_cluster_id, user_id, totalPrice, (error, result) => {
+                                                        if (error) {
+                                                            res.status(error.code).send(error.error_message);
+                                                        }
+                                                        else {
+                                                            for (let j = 0; j < passengers.length; j++) {
+                                                                const currentPassanger = passengers[j];
+                                                                creatPassanger(currentPassanger.name, currentPassanger.age, currentPassanger.gender, currentPassanger.seat_id, (error, result) => {
+                                                                    if (error) {
+                                                                        res.status(error.code).send(error.error_message);
+                                                                    }
+                                                                    else {
+                                                                        creatTicket(ticket_cluster_id, result, currentPassanger.seat_id, (error, result) => {
+                                                                            if (error) {
+                                                                                res.status(error.code).send(error.error_message);
+                                                                            }
+                                                                            else {
+                                                                                if (i == under_booking_seats.length - 1 && j == passengers.length - 1) {
+                                                                                    res.status(200).send(passengers);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
+
+                                        }
+                                    });
                                 }
                             });
                         }
-                        // create ticket cluster
+
                         // create ticket
                         // create payment
                     }
