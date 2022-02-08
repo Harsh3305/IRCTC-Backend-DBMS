@@ -144,7 +144,7 @@ function getbasePrice(coach_id, source_station_id, destination_station_id, callb
                 const price = result.PRICE;
                 getStationDistance(train_id, source_station_id, destination_station_id, (error, result)=>{
                     if (error) {
-                        callback({ error_code: 500, error_message: error.message });
+                        callback({ error_code: 500, error_message: error.error_message });
                     }
                     else {
                         const totalPrice = price*result;

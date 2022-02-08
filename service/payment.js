@@ -16,7 +16,7 @@ function creatPayment(ticket_cluster_id, user_id, amount, callback) {
         }
         else {
             const value = [[ticket_cluster_id, user_id, amount]];
-            const sql_query = `INSERT INTO PAYMENT (TICKER_CLUSTER_ID, USER_ID, AMOUNT) VALUES = ?;`;
+            const sql_query = `INSERT INTO PAYMENT (TICKET_CLUSTER_ID, USER_ID, AMOUNT) VALUES ?;`;
             connection.query(sql_query, [value], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

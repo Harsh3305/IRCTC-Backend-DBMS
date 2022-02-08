@@ -19,7 +19,7 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
          * ]
          */
         const coach_id = req.body.coach_id;
-        const user_id = req.body.user_id;
+        const user_id = req.headers.id;
         const passengers = req.body.passengers;
         const source_id = req.body.source_id;
         const destination_id = req.body.destination_id;
@@ -28,7 +28,7 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
 
         getAllVacentSeatOfCoach(coach_id, (error, result) => {
             if (error) {
-                res.status(error.code).send(error.error_message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 try {
@@ -42,39 +42,39 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                         under_booking_seats = result.slice(0, passengers.length);
                         // seat book 
                         for (let i = 0; i < under_booking_seats.length; i++) {
-                            const seat_id = seat[i].SEAT_ID;
+                            const seat_id = under_booking_seats[i].SEAT_ID;
                             bookSeat(seat_id, (error, result) => {
                                 if (error) {
-                                    res.status(error.code).send(error.error_message);
+                                    res.status(error.error_code).send(error.error_message);
                                 }
                                 else {
                                     passengers[i].seat_id = seat_id;
                                     // create ticket cluster
                                     createTicketCluster(train_departure_time, source_id, destination_id, train_id, (error, ticket_cluster_id) => {
                                         if (error) {
-                                            res.status(error.code).send(error.error_message);
+                                            res.status(error.error_code).send(error.error_message);
                                         }
                                         else {
                                             getbasePrice(coach_id, source_id, destination_id, (error, totalPrice) => {
                                                 if (error) {
-                                                    res.status(error.code).send(error.error_message);
+                                                    res.status(error.error_code).send(error.error_message);
                                                 }
                                                 else {
                                                     creatPayment(ticket_cluster_id, user_id, totalPrice, (error, result) => {
                                                         if (error) {
-                                                            res.status(error.code).send(error.error_message);
+                                                            res.status(error.error_code).send(error.error_message);
                                                         }
                                                         else {
                                                             for (let j = 0; j < passengers.length; j++) {
                                                                 const currentPassanger = passengers[j];
                                                                 creatPassanger(currentPassanger.name, currentPassanger.age, currentPassanger.gender, currentPassanger.seat_id, (error, result) => {
                                                                     if (error) {
-                                                                        res.status(error.code).send(error.error_message);
+                                                                        res.status(error.error_code).send(error.error_message);
                                                                     }
                                                                     else {
                                                                         creatTicket(ticket_cluster_id, result, currentPassanger.seat_id, (error, result) => {
                                                                             if (error) {
-                                                                                res.status(error.code).send(error.error_message);
+                                                                                res.status(error.error_code).send(error.error_message);
                                                                             }
                                                                             else {
                                                                                 if (i == under_booking_seats.length - 1 && j == passengers.length - 1) {
@@ -118,6 +118,11 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     // create payment
 });
 // delete ticket cluster if user
+router.post("/deleteTicketCluster", verifyUserAccessToken, async (req, res)=>{
+    // Get Ticket Cluster
+    // Get All seats booked
+    // isBoked = false for all seat_id
+});
 // get all ticket cluster of user
 // get all vacant seats of coach
 router.get("/numberOfVacentSeat/:coach_id", verifyUserAccessToken, async (req, res) => {
@@ -125,7 +130,7 @@ router.get("/numberOfVacentSeat/:coach_id", verifyUserAccessToken, async (req, r
         const coach_id = req.params.coach_id;
         getAllVacentSeatOfCoach(coach_id, (error, result) => {
             if (error) {
-                res.status(error.code).send(error.error_message);
+                res.status(error.error_code).send(error.error_message);
             }
             else {
                 try {

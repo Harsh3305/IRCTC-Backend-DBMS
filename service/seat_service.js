@@ -41,7 +41,7 @@ function bookSeat(seat_id, callback) {
             callback(error);
         }
         else {
-            if (is_Booked) {
+            if (is_Booked.IS_SEAT_BOOKED) {
                 callback({ error_code: 404, error_message: "Seat not available" });
             }
             else {
@@ -59,13 +59,13 @@ function bookSeat(seat_id, callback) {
                         console.log(error);
                     }
                     else {
-                        const sql_query = `UPDATE SEAT SET IS_SEAT_BOOKED = 'TRUE' WHERE SEAT_ID = '${seat_id}'`;
+                        const sql_query = `UPDATE SEAT SET IS_SEAT_BOOKED = '1' WHERE SEAT_ID = '${seat_id}'`;
                         connection.query(sql_query, (error, result) => {
                             if (error) {
                                 callback({ error_code: 500, error_message: error.message });
                             }
                             else {
-                                callback(null, 'sEAT BOOKED successfully');
+                                callback(null, 'SEAT BOOKED successfully');
                             }
                         })
                     }
@@ -176,7 +176,7 @@ function isSeatBooked(seat_id, callback) {
         }
         else {
             const sql_query = `SELECT IS_SEAT_BOOKED FROM SEAT WHERE SEAT_ID = '${seat_id}'`;
-            connection.query(sql_query, [values], (error, result) => {
+            connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
                 }

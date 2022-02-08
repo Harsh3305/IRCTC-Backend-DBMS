@@ -16,7 +16,7 @@ function creatPassanger(name, age, gender, seat_id, callback) {
         }
         else {
             const value = [[name, age, gender, seat_id]];
-            const sql_query = `INSERT INTO PASSANGER (NAME, AGE, SEAT_ID) VALUES = ?;`;
+            const sql_query = `INSERT INTO PASSENGER (NAME, AGE, GENDER, SEAT_ID) VALUES ?;`;
             connection.query(sql_query, [value], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

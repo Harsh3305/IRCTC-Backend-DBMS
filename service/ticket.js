@@ -16,7 +16,7 @@ function creatTicket(ticket_cluster_id, passanger_id, seat_id, callback) {
         }
         else {
             const value = [[ticket_cluster_id, passanger_id, seat_id]];
-            const sql_query = `INSERT INTO TICKER (TICKER_CLUSTER_ID, PASSANGER_ID, SEAT_ID) VALUES = ? ;`;
+            const sql_query = `INSERT INTO TICKET (TICKET_CLUSTER_ID, PASSENGER_ID, SEAT_ID) VALUES ? ;`;
             connection.query(sql_query, [value], (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
