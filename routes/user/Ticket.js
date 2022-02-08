@@ -5,7 +5,7 @@ const { getAllVacentSeatOfCoach } = require("./../../service/seat_service");
 const { bookSeat } = require("./../../service/seat_service");
 const { creatTicket } = require("./../../service/ticket");
 const { createTicketCluster } = require("./../../service/ticket_cluster");
-const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFromCoachId, getTrainIdFromCoachId } = require("./../../service/coach_service");
+const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFromCoachId } = require("./../../service/coach_service");
 const { creatPayment } = require("./../../service/payment");
 const { creatPassanger } = require("./../../service/passanger");
 // book ticket cluster
@@ -139,3 +139,4 @@ router.get("/numberOfVacentSeat/:coach_id", verifyUserAccessToken, async (req, r
     }
     catch (error) { }
 });
+module.exports = router;

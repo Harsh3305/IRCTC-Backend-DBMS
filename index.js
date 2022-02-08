@@ -21,7 +21,7 @@ const UserCoachRouter = require("./routes/user/Coach");
 const UserStationRouter = require("./routes/user/Station");
 const UserTrainRouter = require("./routes/user/Trains");
 const UserProcessUserRouter = require("./routes/user/ProcessUser");
-
+const UserTicket = require("./routes/user/Ticket");
 
 require('dotenv').config();
 
@@ -51,7 +51,7 @@ app.use("/api/user/coach", UserCoachRouter);
 app.use("/api/user/station", UserStationRouter);
 app.use("/api/user/train", UserTrainRouter);
 app.use("/api/user/processUser", UserProcessUserRouter);
-
+app.use("/api/user/ticket", UserTicket)
 
 // Use Admin route
 
