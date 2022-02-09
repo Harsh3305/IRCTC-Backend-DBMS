@@ -82,9 +82,8 @@ function deleteTicketCluster(ticket_cluster_id, callback) {
             console.log(error);
         }
         else {
-            const values = [train_departure_time, source_id, destination_id, payment_id];
-            const sql_query = `DROP TICKET_CLUSTER WHERE TICKET_CLUSTER_ID = '${ticket_cluster_id}';`;
-            connection.query(sql_query, [values], (error, result) => {
+            const sql_query = `DELETE FROM TICKET_CLUSTER WHERE TICKET_CLUSTER_ID = ${ticket_cluster_id};`;
+            connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
                 }
@@ -116,7 +115,7 @@ function getTicketCluster(ticket_cluster_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECT * FROM TICKET_CLUSTER WHERE TICKER_CLUSTER_ID = '${ticket_cluster_id};`;
+            const sql_query = `SELECT * FROM TICKET_CLUSTER WHERE TICKER_CLUSTER_ID = '${ticket_cluster_id}';`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -167,4 +166,37 @@ function getAllTicketCluster(callback) {
         });
     });
 }
-module.exports = { createTicketCluster, updateTicketCluster, deleteTicketCluster, getAllTicketCluster, getTicketCluster };
+ 
+function getTicketClusterIdforUser(user_id,callback){
+    
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        database: process.env.DB
+    });
+
+    connection.connect((error) => {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            const sql_query = `SELECT TICKET_CLUSTER_ID FROM PAYMENT WHERE USER_ID = '${user_id}'`;
+            connection.query(sql_query, (error, result) => {
+                if (error) {
+                    callback({ error_code: 500, error_message: error.message });
+                }
+                else {
+                    callback(null, result);
+                }
+            })
+        }
+
+        connection.end((error) => {
+            if (error) {
+                console.error(error);
+            }
+        });
+    });
+}
+module.exports = { createTicketCluster, updateTicketCluster, deleteTicketCluster, getAllTicketCluster, getTicketCluster, getTicketClusterIdforUser};

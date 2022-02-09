@@ -83,51 +83,37 @@ function bookSeat(seat_id, callback) {
 
 
 // TODO:
-function cancellSeat(callback) {
+function cancellSeat(seat_id, callback) {
 
-    isSeatBooked(seat_id, (error, is_Booked) => {
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        database: process.env.DB
+    });
+
+    connection.connect((error) => {
         if (error) {
-            callback(error);
+            console.log(error);
         }
         else {
-            if (!is_Booked) {
-                callback({ error_code: 404, error_message: "Seat not available" });
-            }
-            else {
-                // seat is booked
-
-                const connection = mysql.createConnection({
-                    host: process.env.HOST,
-                    user: process.env.USER,
-                    password: process.env.PASSWORD,
-                    database: process.env.DB
-                });
-
-                connection.connect((error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                    else {
-                        const sql_query = `UPDATE SEAT SET IS_SEAT_BOOKED = 'TRUE' WHERE SEAT_ID = '${seat_id}'`;
-                        connection.query(sql_query, (error, result) => {
-                            if (error) {
-                                callback({ error_code: 500, error_message: error.message });
-                            }
-                            else {
-                                callback(null, 'sEAT BOOKED successfully');
-                            }
-                        })
-                    }
-
-                    connection.end((error) => {
-                        if (error) {
-                            console.error(error);
-                        }
-                    });
-                })
-            }
+            const sql_query = `UPDATE SEAT SET IS_SEAT_BOOKED = 0 WHERE SEAT_ID = ${seat_id} AND IS_SEAT_BOOKED = 1`;
+            connection.query(sql_query, (error, result) => {
+                if (error) {
+                    callback({ error_code: 500, error_message: error.message });
+                }
+                else {
+                    callback(null, 'SEAT Cancelled Successfully');
+                }
+            })
         }
-    });
+
+        connection.end((error) => {
+            if (error) {
+                console.error(error);
+            }
+        });
+    })
 }
 
 function getAllVacentSeatOfCoach(coach_id, callback) {
@@ -193,4 +179,37 @@ function isSeatBooked(seat_id, callback) {
         });
     });
 }
-module.exports = { createSeat, bookSeat, getAllVacentSeatOfCoach }
+function getAllSeatOfTicketCluster(ticket_cluster_id, callback) {
+    const connection = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWORD,
+        database: process.env.DB
+    });
+
+    connection.connect((error) => {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            const sql_query = `SELECT SEAT_ID FROM TICKET WHERE TICKET_CLUSTER_ID = '${ticket_cluster_id}';`;
+            connection.query(sql_query, (error, result) => {
+                if (error) {
+                    callback({ error_code: 500, error_message: error.message });
+                }
+                else {
+                    callback(null, result);
+                }
+            })
+        }
+
+        connection.end((error) => {
+            if (error) {
+                console.error(error);
+            }
+        });
+    })
+}
+
+
+module.exports = { createSeat, bookSeat, getAllVacentSeatOfCoach, getAllSeatOfTicketCluster, cancellSeat}
