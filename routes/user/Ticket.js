@@ -145,10 +145,18 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                                                         return;
                                                     }
                                                     else {
-                                                        if (current_passenger_index === under_booking_seats.length-1) {
-                                                            res.status(200).send(passengers);
-                                                            return;
-                                                        }
+                                                        bookSeat(current_passenger.seat_id, (error, result)=>{
+                                                            if (error) {
+                                                                res.status(error.error_code).send(error.error_message);
+                                                                return;
+                                                            }
+                                                            else {
+                                                                if (current_passenger_index === under_booking_seats.length-1) {
+                                                                    res.status(200).send(passengers);
+                                                                    return;
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 });
                                             }
