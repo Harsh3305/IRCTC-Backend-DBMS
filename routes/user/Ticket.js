@@ -114,36 +114,40 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                 res.status(500).send("Number of passangers are greater then available seats in coach");
             }
             else {
-                under_booking_seats = result.slice(0, passengers.length);
+                under_booking_seats = vacantSeats.slice(0, passengers.length);//error
                 createTicketCluster(train_departure_time, source_id, destination_id, train_id, (error, ticket_cluster_id) => {
                     if (error) {
                         res.status(error.error_code).send(error.error_message);
                     }
                     else {
-                        getbasePrice(coach_id, source_id, destination_id, (error, totalPrice) => {
+                            getbasePrice(coach_id, source_id, destination_id, (error, totalPrice) => {
                             if (error) {
                                 res.status(error.error_code).send(error.error_message);
+                                return;
                             }
                             else {
                                 creatPayment(ticket_cluster_id, user_id, totalPrice, (error, result) => {
 
                                     for (let current_passenger_index = 0; current_passenger_index < under_booking_seats.length; current_passenger_index++) {
-                                        passengers[i].seat_id = vacantSeats[current_passenger_index];
+                                        passengers[current_passenger_index].seat_id = vacantSeats[current_passenger_index].SEAT_ID;//error
                                     }
                                     for (let current_passenger_index = 0; current_passenger_index < under_booking_seats.length; current_passenger_index++) {
                                         const current_passenger = passengers[current_passenger_index];
                                         creatPassanger(current_passenger.name, current_passenger.age, current_passenger.gender, current_passenger.seat_id, (error, passanger_id) => {
                                             if (error) {
                                                 res.status(error.error_code).send(error.error_message);
+                                                return;
                                             }
                                             else {
                                                 creatTicket(ticket_cluster_id, passanger_id, current_passenger.seat_id, (error, result) => {
                                                     if (error) {
                                                         res.status(error.error_code).send(error.error_message);
+                                                        return;
                                                     }
                                                     else {
-                                                        if (current_passenger_index === under_booking_seats.length) {
+                                                        if (current_passenger_index === under_booking_seats.length-1) {
                                                             res.status(200).send(passengers);
+                                                            return;
                                                         }
                                                     }
                                                 });
