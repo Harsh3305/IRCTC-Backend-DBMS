@@ -9,6 +9,7 @@ const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFr
 const { creatPayment } = require("./../../service/payment");
 const { creatPassanger } = require("./../../service/passanger");
 const { add_calcel_tickets_in_db } = require("./../../service/cancel_ticket_service");
+const { Route } = require("express");
 // book ticket cluster
 router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     try {
@@ -194,6 +195,10 @@ router.delete("/deleteTicketCluster/:ticket_cluster_id", verifyUserAccessToken, 
             else {
                 // isBoked = false for all seat_id
                 const total_seat_booked = result.length;
+                if (!result || result.length === 0) {
+                    res.status(500).send("Ticket cluster not found !!");
+                    return;
+                }
                 for (let i = 0; i < result.length; i++) {
                     const current_seat_id = result[i].SEAT_ID;
                     cancellSeat(current_seat_id, (error, result) => {
