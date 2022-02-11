@@ -166,9 +166,7 @@ function getAllTicketCluster(callback) {
         });
     });
 }
- 
-function getTicketClusterIdforUser(user_id,callback){
-    
+function getTicketClusterIdforUser(user_id, callback) {
     const connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
@@ -181,7 +179,7 @@ function getTicketClusterIdforUser(user_id,callback){
             console.log(error);
         }
         else {
-            const sql_query = `SELECT TICKET_CLUSTER_ID FROM PAYMENT WHERE USER_ID = '${user_id}'`;
+            const sql_query = `SELECT * FROM PAYMENT WHERE PAYMENT.USER_ID = '${user_id}' AND IS_TICKET_CANCEL = 0;`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -199,4 +197,4 @@ function getTicketClusterIdforUser(user_id,callback){
         });
     });
 }
-module.exports = { createTicketCluster, updateTicketCluster, deleteTicketCluster, getAllTicketCluster, getTicketCluster, getTicketClusterIdforUser};
+module.exports = { createTicketCluster, updateTicketCluster, deleteTicketCluster, getAllTicketCluster, getTicketCluster, getTicketClusterIdforUser };

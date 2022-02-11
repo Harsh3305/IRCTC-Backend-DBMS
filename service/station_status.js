@@ -53,7 +53,7 @@ function getStationStatusOfTrain(train_id, callback) {
                     callback({ error_code: 500, error_message: error.message });
                 }
                 else {
-                    result.sort((station_1, station_2)=> {
+                    result.sort((station_1, station_2) => {
                         if (station_1.ARRIVAL_TIME > station_2.ARRIVAL_TIME) {
                             return 1;
                         }
@@ -76,38 +76,38 @@ function getStationStatusOfTrain(train_id, callback) {
         });
     })
 }
-function getStationDistance (train_id, station_id_1, station_id_2, callback) {
-        getStationStatusOfTrain(train_id, (error, result)=> {
-            if (error) {
-                callback({ error_code: 500, error_message: error.message });
+function getStationDistance(train_id, station_id_1, station_id_2, callback) {
+    getStationStatusOfTrain(train_id, (error, result) => {
+        if (error) {
+            callback({ error_code: 500, error_message: error.message });
+        }
+        else {
+            var i = 0;
+
+            var index1 = null;
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].STATION_ID == station_id_1) {
+                    index1 = i;
+                    break;
+                }
+            }
+
+            var index2 = null;
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].STATION_ID == station_id_2) {
+                    index2 = i;
+                    break;
+                }
+            }
+
+            if (index1 != null && index2 != null && index1 < index2) {
+                callback(null, (index2 - index1) * 30);
             }
             else {
-                var i=0;
-
-                var index1 = null;
-                for (let i = 0; i < result.length; i++) {
-                    if (result[i].STATION_ID == station_id_1) {
-                        index1 = i;
-                        break;
-                    }
-                }
-
-                var index2 = null;
-                for (let i = 0; i < result.length; i++) {
-                    if (result[i].STATION_ID == station_id_2) {
-                        index2 = i;
-                        break;
-                    }
-                }
-
-                if (index1!= null && index2 != null && index1 > index2) {
-                    callback(null, (index1-index2)*30);
-                }
-                else {
-                    callback({ error_code: 500, error_message: "Station not found" });
-                }
+                callback({ error_code: 500, error_message: "Station not found" });
             }
-        });
+        }
+    });
 }
 function getStationStatusOfId(station_status_id, callback) {
     const connection = mysql.createConnection({
@@ -206,4 +206,4 @@ function deleteStationStatus(station_status_id, callback) {
     })
 }
 
-module.exports = { createStationStatus, updateStationStatus, deleteStationStatus, getStationStatusOfId, getStationStatusOfTrain, getStationDistance};
+module.exports = { createStationStatus, updateStationStatus, deleteStationStatus, getStationStatusOfId, getStationStatusOfTrain, getStationDistance };
