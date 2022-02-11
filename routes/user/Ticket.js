@@ -8,6 +8,7 @@ const { createTicketCluster, getTicketClusterIdforUser, getTicketCluster, delete
 const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFromCoachId } = require("./../../service/coach_service");
 const { creatPayment } = require("./../../service/payment");
 const { creatPassanger } = require("./../../service/passanger");
+const { add_calcel_tickets_in_db } = require("./../../service/cancel_ticket_service");
 // book ticket cluster
 router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
     try {
@@ -120,7 +121,7 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                         res.status(error.error_code).send(error.error_message);
                     }
                     else {
-                            getbasePrice(coach_id, source_id, destination_id, (error, totalPrice) => {
+                        getbasePrice(coach_id, source_id, destination_id, (error, totalPrice) => {
                             if (error) {
                                 res.status(error.error_code).send(error.error_message);
                                 return;
@@ -145,14 +146,14 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                                                         return;
                                                     }
                                                     else {
-                                                        bookSeat(current_passenger.seat_id, (error, result)=>{
+                                                        bookSeat(current_passenger.seat_id, (error, result) => {
                                                             if (error) {
                                                                 res.status(error.error_code).send(error.error_message);
                                                                 return;
                                                             }
                                                             else {
-                                                                if (current_passenger_index === under_booking_seats.length-1) {
-                                                                    res.status(200).send(passengers);
+                                                                if (current_passenger_index === under_booking_seats.length - 1) {
+                                                                    res.status(200).json({ passengers: passengers, price: totalPrice });
                                                                     return;
                                                                 }
                                                             }
@@ -205,7 +206,14 @@ router.delete("/deleteTicketCluster/:ticket_cluster_id", verifyUserAccessToken, 
                             //     res.status(error.error_code).send(error.error_message);
                             // }
                             // else {
-                            res.status(200).send("Ticket deleted successfully");
+                            add_calcel_tickets_in_db(ticket_cluster_id, () => {
+                                if (error) {
+                                    res.status(error.error_code).send(error.error_message);
+                                }
+                                else {
+                                    res.status(200).send("Ticket deleted successfully");
+                                }
+                            });
                             // }
                             // });
                         }
