@@ -14,11 +14,11 @@ function add_calcel_tickets_in_db(ticket_cluster_id, callback) {
         if (err) { console.log(err); }
         else {
 
-            const values = [ticket_cluster_id];
-            const sql_query = "INSERT INTO CANCEL_TICKET_CLUSTER (TICKET_CLUSTER_ID) VALUES ? ;"
+            // const sql_query = "INSERT INTO CANCEL_TICKET_CLUSTER (TICKET_CLUSTER_ID) VALUES ? ;"
+            const sql_query = `UPDATE PAYMENT SET IS_TICKET_CANCEL = 1 WHERE TICKET_CLUSTER_ID = '${ticket_cluster_id}';`
             console.log(sql_query);
 
-            connection.query(sql_query, [[values]], function (err, result) {
+            connection.query(sql_query, function (err, result) {
                 if (err) {
                     console.error(err);
                     callback(500, err.message, "");
@@ -26,7 +26,7 @@ function add_calcel_tickets_in_db(ticket_cluster_id, callback) {
                 else {
                     console.log(result);
                     const user_id = result.insertId;
-                    callback(null, user_id, isAdmin);
+                    callback(null, user_id);
                     console.log("cancelled ticket added to database");
                 }
             });
