@@ -82,7 +82,7 @@ function getTrainFromSourceDestinaiton(source_id, destination_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECT TRAIN_ID FROM STATION_STATUS WHERE STATION_ID = '${SOURCE_STATION_ID}' INTERSECT SELEVT TRAIN_ID FROM STATION_STATUS WHERE STATION_ID = '${DESTINATION_STATION_ID}`;
+            const sql_query = `SELECT TRAIN_ID FROM STATION_STATUS WHERE STATION_ID = '${source_id}' AND TRAIN_ID IN (SELECT TRAIN_ID FROM STATION_STATUS WHERE STATION_ID = '${destination_id}');`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
