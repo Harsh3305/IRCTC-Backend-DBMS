@@ -14,7 +14,7 @@ function updateUser(user_id, email, password, username, age, phone, isAdmin, cal
             console.log(error);
         }
         else {
-            const sql_query = `UPDATE USER SET EMAIL = '${email}', PASSWORD = '${password}', USERNAME = '${username}', AGE = '${age}', PHONE_NUMBER = '${phone}', IS_ADMIN = '${isAdmin}' WHERE USER_ID = '${user_id}';`;
+            const sql_query = `UPDATE USER SET EMAIL = '${email}', PASSWORD = '${password}', USER_NAME = '${username}', AGE = '${age}', PHONE_NUMBER = '${phone}', IS_ADMIN = '${isAdmin}' WHERE USER_ID = '${user_id}';`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
