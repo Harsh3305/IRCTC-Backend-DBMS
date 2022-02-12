@@ -9,10 +9,10 @@ router.put("/updateUser", verifyUserAccessToken, async (req, res) => {
         const username = req.body.username;
         const age = req.body.age;
         const phone = req.body.phone;
-        const user_id = req.params.id
+        const user_id = req.headers.id
         // update up user and send access token
 
-        updateUser(user_id, email, password, username, age, phone, false, (error, responce) => {
+        updateUser(user_id, email, password, username, age, phone, 0, (error, responce) => {
             if (error) {
                 res.status(error.error_code).send(error.error_message);
             }
