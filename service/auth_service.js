@@ -1,3 +1,4 @@
+const res = require("express/lib/response");
 const mysql = require("mysql2");
 
 function createUser(email, password, username, age, phone, isAdmin, callback) {
@@ -64,15 +65,21 @@ function loginUser(email, password, callback) {
                     callback(500, '', '');
                 }
                 else {
-                    const user_id = result[0].USER_ID;
-                    const storedPassword = result[0].PASSWORD;
-                    const is_admin = result[0].IS_ADMIN;
-                    if (storedPassword === password) {
-                        callback(null, user_id, is_admin);
+                    try {
+                        const user_id = result[0].USER_ID;
+                        const storedPassword = result[0].PASSWORD;
+                        const is_admin = result[0].IS_ADMIN;
+                        if (storedPassword === password) {
+                            callback(null, user_id, is_admin);
+                        }
+                        else {
+                            callback(403, '', '');
+                        }
                     }
-                    else {
-                        callback(403, '', '');
+                    catch (e) {
+                        callback({ error_code: 430, error_message: "User not found" });
                     }
+
                 }
             });
 
