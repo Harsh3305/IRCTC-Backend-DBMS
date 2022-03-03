@@ -154,7 +154,7 @@ router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
                                                             }
                                                             else {
                                                                 if (current_passenger_index === under_booking_seats.length - 1) {
-                                                                    res.status(200).json({ passengers: passengers, price: totalPrice });
+                                                                    res.status(200).json({ passengers: passengers, price: totalPrice, ticket_cluster_id: ticket_cluster_id });
                                                                     return;
                                                                 }
                                                             }

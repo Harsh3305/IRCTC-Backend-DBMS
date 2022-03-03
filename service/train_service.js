@@ -182,13 +182,13 @@ function getAllCoachOfTrain(train_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECT COACH_ID FROM COACH WHERE TRAIN_ID = '${train_id}';`;
+            const sql_query = `SELECT * FROM COACH WHERE TRAIN_ID = '${train_id}';`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
                 }
                 else {
-                    callback(null, "Train updated successfully");
+                    callback(null, result);
                 }
             })
         }

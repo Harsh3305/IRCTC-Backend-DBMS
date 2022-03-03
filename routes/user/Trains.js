@@ -45,7 +45,7 @@ router.get("/getTrain/:source_id/:destination_id", verifyUserAccessToken, async 
     }
 });
 
-router.get("getAllTrains", verifyUserAccessToken, (req, res) => {
+router.get("/getAllTrains", verifyUserAccessToken, (req, res) => {
     try {
         // get Trains
         getAllTrain((error, responce) => {
@@ -63,7 +63,7 @@ router.get("getAllTrains", verifyUserAccessToken, (req, res) => {
     }
 });
 
-router.get("getCoachOfTrain/:train_id", verifyUserAccessToken, async (req, res) => {
+router.get("/getCoachOfTrain/:train_id", verifyUserAccessToken, async (req, res) => {
     try {
         const train_id = req.params.train_id;
         getAllCoachOfTrain(train_id, (error, result) => {
