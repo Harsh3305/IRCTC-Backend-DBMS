@@ -73,11 +73,12 @@ function loginUser(email, password, callback) {
                             callback(null, user_id, is_admin);
                         }
                         else {
-                            callback(403, '', '');
+                            callback({ error_code: 200, error_message: "Wrong Password" }, '', '');
                         }
                     }
                     catch (e) {
-                        callback(430, '', '');
+                        // callback(430, '', '');
+                        callback({ error_code: 200, error_message: "Accound doesnot exist" }, '', '');
                     }
                 }
             });

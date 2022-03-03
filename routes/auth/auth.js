@@ -41,7 +41,7 @@ router.post("/signup", async (req, res) => {
 
         createUser(email, password, username, age, phone, isAdmin, (error, user_id, is_admin) => {
             if (error) {
-                res.status(error).json({ error: 'Something went wrong !!' });
+                res.status(error.error_code).json({ error: error.error_message });
             }
             else {
                 const accessToken = generateAccessToken(user_id, is_admin);
@@ -51,7 +51,7 @@ router.post("/signup", async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.status(error).json({ error: 'Something went wrong !!' });
+        res.status(200).json({ error: 'Something went wrong !!' });
     }
 });
 
