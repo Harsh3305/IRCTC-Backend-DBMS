@@ -77,9 +77,8 @@ function loginUser(email, password, callback) {
                         }
                     }
                     catch (e) {
-                        callback({ error_code: 430, error_message: "User not found" });
+                        callback(430, '', '');
                     }
-
                 }
             });
 
