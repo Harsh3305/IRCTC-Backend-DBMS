@@ -81,7 +81,7 @@ function deletePassanger(passanger_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `DROP FROM STATION_STATUS WHERE PASSANGER_ID = '${passanger_id};`;
+            const sql_query = `DELETE FROM PASSENGER WHERE PASSANGER_ID = '${passanger_id};`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

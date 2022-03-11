@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 
-function add_calcel_tickets_in_db(ticket_cluster_id, callback) {
+function add_cancel_tickets_in_db(ticket_cluster_id, callback) {
 
     var connection = mysql.createConnection({
         host: process.env.HOST,
@@ -39,4 +39,4 @@ function add_calcel_tickets_in_db(ticket_cluster_id, callback) {
         }
     });
 }
-module.exports = { add_calcel_tickets_in_db };
+module.exports = { add_cancel_tickets_in_db };
