@@ -15,17 +15,17 @@ router.post("/login", async (req, res) => {
 
         loginUser(email, password, (error, user_id, is_admin) => {
             if (error) {
-                res.status(error).send("Account does not exist");
+                res.status(200).json({ "error": "Account does not exist" });
             }
             else {
                 const accessToken = generateAccessToken(user_id, is_admin);
-                res.status(200).json({ accessToken: accessToken, user_id: user_id });
+                res.status(200).json({ accessToken: accessToken, user_id: user_id, "error": "" });
             }
         });
     }
     catch (error) {
         console.log(error);
-        res.status(500).send("Something went wrong !!")
+        res.status(200).json({ "error": "Something went wrong" });
     }
 });
 
