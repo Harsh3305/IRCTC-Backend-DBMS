@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { verifyUserAccessToken } = require("./../verify_access_token");
 const { deleteUser, getUser, updateUser } = require("./../../service/process_user_service");
-const {deleteUserFeedbacks} = require("./../../service/feedback_service");
-const {deleteUserAnalytics} = require("./../../service/analytics_service");
-const {getPaymentOfUser, deletePayment} = require("./../../service/payment");
-const {getAllTicketsOfTicketCluster, deleteTicket} = require("./../../service/ticket");
-const {add_cancel_tickets_in_db} = require("./../../service/cancel_ticket_service");
-const {deletePassanger} = require("./../../service/passanger");
+const { deleteUserFeedbacks } = require("./../../service/feedback_service");
+const { deleteUserAnalytics } = require("./../../service/analytics_service");
+const { getPaymentOfUser, deletePayment } = require("./../../service/payment");
+const { getAllTicketsOfTicketCluster, deleteTicket } = require("./../../service/ticket");
+const { add_cancel_tickets_in_db } = require("./../../service/cancel_ticket_service");
+const { deletePassanger } = require("./../../service/passanger");
+const { cancellSeat } = require("../../service/seat_service");
 router.put("/updateUser", verifyUserAccessToken, async (req, res) => {
     try {
         const email = req.body.email;
@@ -62,58 +63,75 @@ router.delete("/deleteUser", verifyUserAccessToken, async (req, res) => {
         //     }
         // });
 
-        getPaymentOfUser(user_id, (error, payments)=>{
+        getPaymentOfUser(user_id, (error, payments) => {
             if (error) {
                 res.status(error.error_code).send(error.error_message);
             }
             else {
-                for (let i = 0; i<payments.length; i++) {
+                for (let i = 0; i < payments.length; i++) {
                     const payment = payments[i];
-                    deletePayment(payment["PAYMENT_ID"], (error, payment_delete_message)=>{
+                    deletePayment(payment["PAYMENT_ID"], (error, payment_delete_message) => {
                         if (error) {
+                            console.log(error);
                             res.status(error.error_code).send(error.error_message);
                         }
                         else {
-                            getAllTicketsOfTicketCluster(payment["TICKET_CLUSTER_ID"], (error, tickets)=>{
+                            getAllTicketsOfTicketCluster(payment["TICKET_CLUSTER_ID"], (error, tickets) => {
                                 // cancell tickets
                                 if (error) {
                                     res.status(error.error_code).send(error.error_message);
                                 }
                                 else {
-                                    add_cancel_tickets_in_db(payment["TICKET_CLUSTER_ID"], (error, message)=>{
+
+                                    add_cancel_tickets_in_db(payment["TICKET_CLUSTER_ID"], (error, message) => {
                                         if (error) {
                                             res.status(error.error_code).send(error.error_message);
                                         }
                                         else {
                                             // delete tickets
-                                            for (let j = 0; j<tickets.length; j++) {
-                                                const  ticket = tickets[j];
-                                                deleteTicket(ticket["TICKET_ID"], (error, message)=>{
+                                            for (let j = 0; j < tickets.length; j++) {
+                                                const ticket = tickets[j];
+                                                cancellSeat(ticket["SEAT_ID"], (error, messsage) => {
                                                     if (error) {
-                                                        res.status(error.error_code).send(error.error_message);
+                                                        console.log(error);
                                                     }
                                                     else {
-                                                        // delete Passenger
-                                                        deletePassanger(ticket["PASSENGER_ID"], (error, message)=>{
+
+                                                        deleteTicket(ticket["TICKET_ID"], (error, message) => {
                                                             if (error) {
                                                                 res.status(error.error_code).send(error.error_message);
                                                             }
                                                             else {
-                                                                if (i === payments.length-1 && j === tickets.length - 1) {
-                                                                    // delete User
-                                                                    
-                                                                    deleteUser(user_id, (error, responce) => {
-                                                                        if (error) {
-                                                                            res.status(error.error_code).send(error.error_message);
+                                                                // delete Passenger
+                                                                deletePassanger(ticket["PASSENGER_ID"], (error, message) => {
+                                                                    if (error) {
+                                                                        res.status(error.error_code).send(error.error_message);
+                                                                    }
+                                                                    else {
+                                                                        if (i === payments.length - 1 && j === tickets.length - 1) {
+                                                                            // delete User
+                                                                            deleteUserFeedbacks(user_id, (error, message) => {
+                                                                                if (error) {
+                                                                                    console.log(error);
+                                                                                }
+                                                                                else {
+                                                                                    deleteUser(user_id, (error, responce) => {
+                                                                                        if (error) {
+                                                                                            res.status(error.error_code).send(error.error_message);
+                                                                                        }
+                                                                                        else {
+                                                                                            res.status(200).json(responce);
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            });
                                                                         }
-                                                                        else {
-                                                                            res.status(200).json(responce);
-                                                                        }
-                                                                    });
-                                                                }
+                                                                    }
+                                                                });
                                                             }
                                                         });
                                                     }
+
                                                 });
                                             }
                                         }

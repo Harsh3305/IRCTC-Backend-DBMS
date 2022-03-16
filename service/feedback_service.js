@@ -1,5 +1,6 @@
-function createFeedback (user_id, message, callback) {
-    
+const mysql = require("mysql2");
+function createFeedback(user_id, message, callback) {
+
     var connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
@@ -47,8 +48,6 @@ function deleteUserFeedbacks(user_id, callback) {
     connection.connect(function (err) {
         if (err) { console.log(err); }
         else {
-
-            const values = [user_id, message];
             const sql_query = `DELETE FROM FEEDBACK WHERE USER_ID = '${user_id}';`
             console.log(sql_query);
 
@@ -69,4 +68,4 @@ function deleteUserFeedbacks(user_id, callback) {
         }
     });
 }
-module.exports = {createFeedback, deleteUserFeedbacks};
+module.exports = { createFeedback, deleteUserFeedbacks };

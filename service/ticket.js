@@ -82,7 +82,7 @@ function deleteTicket(ticket_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `DELETE FROM TICKET WHERE TICKET_ID = '${ticket_id};`;
+            const sql_query = `DELETE FROM TICKET WHERE TICKET_ID = '${ticket_id}';`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -146,7 +146,7 @@ function getAllTicketsOfTicketCluster(ticket_cluster_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECT TICKET_ID, PASSENGER_ID FROM TICKET WHERE TICKET_CLUSTER_ID = '${ticket_cluster_id}';`;
+            const sql_query = `SELECT TICKET_ID, PASSENGER_ID, SEAT_ID FROM TICKET WHERE TICKET_CLUSTER_ID = '${ticket_cluster_id}';`;
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });
@@ -198,4 +198,4 @@ function getAllTicket(callback) {
 }
 
 
-module.exports = { creatTicket, updateTicket, deleteTicket, getTicket, getAllTicket, getAllTicketsOfTicketCluster};
+module.exports = { creatTicket, updateTicket, deleteTicket, getTicket, getAllTicket, getAllTicketsOfTicketCluster };

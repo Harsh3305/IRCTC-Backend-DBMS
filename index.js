@@ -23,6 +23,8 @@ const UserTrainRouter = require("./routes/user/Trains");
 const UserProcessUserRouter = require("./routes/user/ProcessUser");
 const UserTicket = require("./routes/user/Ticket");
 
+const StatRoutes = require("./routes/stat");
+
 require('dotenv').config();
 
 const connection = mysql.createConnection({
@@ -60,6 +62,9 @@ app.use("/api/admin/station", AdminStationRouter);
 app.use("/api/admin/train", AdminTrainRouter);
 app.use("/api/admin/stationStatus", AdminStationStatusRouter);
 app.use("/api/admin/seat", AdminSeatRouter);
+
+// stat routes 
+app.use("/api", StatRoutes);
 app.listen(process.env.PORT, function () {
   console.log("Server is Started");
 });
