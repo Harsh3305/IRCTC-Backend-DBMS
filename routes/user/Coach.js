@@ -1,7 +1,7 @@
 const { getCoachByID, getCoachesOfTrain } = require("./../../service/coach_service");
+const { getAllVacentSeatOfCoach } = require("./../../service/seat_service");
 const router = require("express").Router();
 const { verifyUserAccessToken } = require("./../verify_access_token");
-const { getAllVacentSeatOfCoach } = require("./../../service/seat_service");
 
 router.get("/getCoachByID/:coach_id", verifyUserAccessToken, async (req, res) => {
     try {
@@ -30,12 +30,15 @@ router.get("/getCoachesByTrainID/:train_id", verifyUserAccessToken, async (req, 
                 res.status(error.error_code).send(error.error_message);
             }
             else {
+                // res.status(200).json(responce);
+
                 for (let i = 0; i < responce.length; i++) {
                     const coach_id = responce[i].COACH_ID
                     try {
-                        getAllVacentSeatOfCoach(coach_id, (error, message) => {
-                            if (error) {
-                                res.status(error.error_code).send(error.error_message)
+                        getAllVacentSeatOfCoach(coach_id, (err, message) => {
+                            if (err) {
+                                console.log(err);
+                                res.status(err.error_code).send(err.error_message)
                             }
                             else {
                                 try {
@@ -57,7 +60,8 @@ router.get("/getCoachesByTrainID/:train_id", verifyUserAccessToken, async (req, 
                         });
                     }
                     catch (error) {
-                        res.status(200).send(0);
+                        console.log(error);
+                        res.status(200).send(responce);
                         return;
                     }
                 }
