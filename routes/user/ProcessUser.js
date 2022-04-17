@@ -152,7 +152,7 @@ router.delete("/deleteUser", verifyUserAccessToken, async (req, res) => {
 
 router.get("/getUser", verifyUserAccessToken, async (req, res) => {
     try {
-        const user_id = req.params.id;
+        const user_id = req.headers.id;
         // Get User by id
 
         getUser(user_id, (error, responce) => {
