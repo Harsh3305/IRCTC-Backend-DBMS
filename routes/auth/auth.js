@@ -9,23 +9,23 @@ router.post("/login", async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-
+        console.log(`recieved email: ${email}`);
         // login user and send access token
 
 
         loginUser(email, password, (error, user_id, is_admin) => {
             if (error) {
-                res.status(200).json({ "error": "Account does not exist" });
+                res.status(200).json({ error: "Account does not exist" });
             }
             else {
                 const accessToken = generateAccessToken(user_id, is_admin);
-                res.status(200).json({ accessToken: accessToken, user_id: user_id, "error": "" });
+                res.status(200).json({ accessToken: accessToken, user_id: user_id, error: "" });
             }
         });
     }
     catch (error) {
         console.log(error);
-        res.status(200).json({ "error": "Something went wrong" });
+        res.status(500).send("Something went wrong !!")
     }
 });
 
