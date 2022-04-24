@@ -8,7 +8,7 @@ const { createTicketCluster, getTicketClusterIdforUser, getTicketCluster, delete
 const { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFromCoachId } = require("./../../service/coach_service");
 const { creatPayment } = require("./../../service/payment");
 const { creatPassanger } = require("./../../service/passanger");
-const { add_cancel_tickets_in_db } = require("./../../service/cancel_ticket_service");
+const { add_calcel_tickets_in_db } = require("./../../service/cancel_ticket_service");
 const { Route } = require("express");
 // book ticket cluster
 router.post("/bookTicketCluster", verifyUserAccessToken, async (req, res) => {
@@ -211,7 +211,7 @@ router.delete("/deleteTicketCluster/:ticket_cluster_id", verifyUserAccessToken, 
                             //     res.status(error.error_code).send(error.error_message);
                             // }
                             // else {
-                            add_cancel_tickets_in_db(ticket_cluster_id, () => {
+                            add_calcel_tickets_in_db(ticket_cluster_id, () => {
                                 if (error) {
                                     res.status(error.error_code).send(error.error_message);
                                 }

@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-const { getStationDistance } = require("./station_status");
+const {getStationDistance} = require("./station_status");
 function createCoach(train_id, coach_type, price, callback) {
 
     const connection = mysql.createConnection({
@@ -101,40 +101,8 @@ function getCoachesOfTrain(train_id, callback) {
         }
     });
 }
-function getCoachesOfTrain(train_id) {
-
-    const connection = mysql.createConnection({
-        host: process.env.HOST,
-        user: process.env.USER,
-        password: process.env.PASSWORD,
-        database: process.env.DB
-    });
-
-    connection.connect((error) => {
-        if (error) {
-            console.log(error);
-        }
-        else {
-            const sql_query = `SELECT * FROM COACH WHERE TRAIN_ID = '${train_id}'`;
-            connection.query(sql_query, (error, result) => {
-                if (error) {
-                    callback({ error_code: 500, error_message: error.message });
-                }
-                else {
-                    callback(null, result);
-                }
-            })
-
-            connection.end((error) => {
-                if (error) {
-                    console.error(error);
-                }
-            });
-        }
-    });
-}
-function getTrainIdFromCoachId(coach_id, callback) {
-
+function getTrainIdFromCoachId (coach_id, callback) {
+    
     const connection = mysql.createConnection({
         host: process.env.HOST,
         user: process.env.USER,
@@ -165,21 +133,21 @@ function getTrainIdFromCoachId(coach_id, callback) {
         }
     });
 }
-function getbasePrice(coach_id, source_station_id, destination_station_id, callback) {
+function getbasePrice(coach_id, source_station_id, destination_station_id, callback ) {
     try {
-        getCoachByID(coach_id, (error, result) => {
+        getCoachByID(coach_id, (error, result)=> {
             if (error) {
                 callback({ error_code: 500, error_message: error.message });
             }
             else {
                 const train_id = result.TRAIN_ID;
                 const price = result.PRICE;
-                getStationDistance(train_id, source_station_id, destination_station_id, (error, result) => {
+                getStationDistance(train_id, source_station_id, destination_station_id, (error, result)=>{
                     if (error) {
                         callback({ error_code: 500, error_message: error.error_message });
                     }
                     else {
-                        const totalPrice = price * result;
+                        const totalPrice = price*result;
                         callback(null, totalPrice);
 
                     }
@@ -191,4 +159,4 @@ function getbasePrice(coach_id, source_station_id, destination_station_id, callb
         console.error(error);
     }
 }
-module.exports = { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice, getTrainIdFromCoachId, getTrainIdFromCoachId }
+module.exports  = { createCoach, getCoachByID, getCoachesOfTrain, getbasePrice,getTrainIdFromCoachId, getTrainIdFromCoachId}

@@ -179,7 +179,7 @@ function getTicketClusterIdforUser(user_id, callback) {
             console.log(error);
         }
         else {
-            const sql_query = `SELECT * FROM PAYMENT WHERE PAYMENT.USER_ID = '${user_id}' AND IS_TICKET_CANCEL = 0;`;
+            const sql_query = `select source_table.TICKET_CLUSTER_ID, source_table.SOURCE_ID, source_table.SOURCE_NAME, source_table.TRAIN_ID, source_table.TRAIN_NAME, destination_table.DESTINATION_ID, destination_table.DESTINATION_NAME from (select t1.TICKET_CLUSTER_ID ,t1.SOURCE_ID, t1.TRAIN_ID, t1.NAME as TRAIN_NAME, STATION.STATION_NAME as SOURCE_NAME from (select * from (select * from PAYMENT natural join TICKET_CLUSTER where (PAYMENT.USER_ID = ${user_id} and PAYMENT.IS_TICKET_CANCEL = 0)) as NewData natural join TRAIN) as t1, STATION where t1.SOURCE_ID = STATION.STATION_ID) as source_table, (select t2.TICKET_CLUSTER_ID ,t2.SOURCE_ID, t2.DESTINATION_ID, t2.TRAIN_ID, t2.NAME, STATION.STATION_NAME as DESTINATION_NAME from (select * from (select * from PAYMENT natural join TICKET_CLUSTER where (PAYMENT.USER_ID = ${user_id} and PAYMENT.IS_TICKET_CANCEL = 0)) as NewData natural join TRAIN) as t2, STATION where t2.DESTINATION_ID = STATION.STATION_ID) as destination_table where source_table.TICKET_CLUSTER_ID = destination_table.TICKET_CLUSTER_ID;`
             connection.query(sql_query, (error, result) => {
                 if (error) {
                     callback({ error_code: 500, error_message: error.message });

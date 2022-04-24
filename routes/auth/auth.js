@@ -15,7 +15,7 @@ router.post("/login", async (req, res) => {
 
         loginUser(email, password, (error, user_id, is_admin) => {
             if (error) {
-                res.status(200).json({ error: "Account does not exist" });
+                res.status(200).json({error: "Account does not exist"});
             }
             else {
                 const accessToken = generateAccessToken(user_id, is_admin);
